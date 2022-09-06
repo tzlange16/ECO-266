@@ -20,14 +20,13 @@
 my.integers <- seq(-3,10)
 my.integers <- c(-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10)
 
-#B) what is the class of this my.integers?
+#B) what is the class of my.integers?
 class(my.integers)
 
 #C) transform my.integers into a character class; be sure to reassign it as my.integers
 my.integers <- as.character(my.integers)
 
-
-#D) double check the class to make sure it worked.
+#D) Check the class to make sure it worked.
 class(my.integers)
 
 #E) re-transform my.integers into a numeric vector
@@ -121,7 +120,7 @@ sample.sd <- round(sd(mpg.sample),2)
 # D) assume that the observations in the mpg vector represent those of the entire population.
 #    Calculate how many sample standard deviations away from the population mean is your sample mean?
 #    HINT: the standard deviation value of an observation is equivalent to its Z-score, which is: 
-#          (value 1 - value 2)/Standard deviation
+#          (value 1 - value 2)/sample standard deviation
 (mpg.mean-sample.mean)/sample.sd
 
 
@@ -129,7 +128,7 @@ sample.sd <- round(sd(mpg.sample),2)
 # A) calculate the mean hp, assign it as hp.mean; round to 2 decimal places
 hp.mean <- round(mean(hp),2)
 
-# B) take a sample of mpg with 20 observations, assign it as mpg.sample
+# B) take a sample of hp with 20 observations, assign it as hp.sample
 hp.sample <- sample(hp, 20)
 
 # C) calculate the average of hp.sample and assign it as hp.sample.mean; round to 2 decimal points
@@ -139,7 +138,7 @@ hp.sample.mean <- round(mean(hp.sample),2)
 sample.var <- round(var(hp.sample),2)
 
 # E) sample variance is defined as the sum of the squared deviations of a sample divided by (n-1), or the number of observations minus 1.
-#    to verify if R calculated it correctly, we will calculate it by hand.
+#    to verify that R calculated it correctly, we will calculate it by hand.
 #    use hp.sample.mean to transform hp.sample into a vector of deviations and assign it as hp.devs, 
 #    DO NOT ROUND
 hp.devs <- hp.sample-hp.sample.mean
@@ -154,6 +153,8 @@ sample.var.test <- round(devs.squared/19,2)
 
 # H) comment whether sample.var.test is equal to sample.var
 
+#They are equal
+
 # Question 6
 # A) create a box and whisker plot of your horsepower sample
 boxplot(hp.sample)
@@ -161,8 +162,8 @@ boxplot(hp.sample)
 # B) what is the interquartile range of your horsepower sample?
 IQR(hp.sample)
 
-# C) Outliers are usually defined as observations that exceed the first or third quartile by 1.5 or 3 times the interquartile range
-#    Using R code, get help from r studio to find out which argument helps you define outliers on a box plot, 
+# C) Outliers are usually defined as observations that exceed the first or third quantile by 1.5 or 3 times the interquartile range
+#    Using R code, get help from rstudio to find out which argument helps you define outliers on a box plot, 
 #    and comment what the argument is.
 ?boxplot #range
 
@@ -189,7 +190,7 @@ hist(mpg) #30 to 35
 #10
 
 # D) A car enthusiast is interested in the relationship between an engine's horsepower and the miles per gallon a car gets
-#    Create a scatterplot of this relationship
+#    Create a scatter plot of this relationship
 plot(hp,mpg)
 
 # E) Comment if there appears to be a relationship between horsepower and miles per gallon and the nature of it if there is one
