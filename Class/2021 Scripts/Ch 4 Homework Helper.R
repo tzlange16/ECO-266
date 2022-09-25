@@ -30,13 +30,16 @@
 # p = cumulative density function, or CDF
 # q = quantile function
 
-# Distributions in this chapter
+# DISCRETE Distributions from chapter 4
 dhyper()
 dbinom()
 dgeom()
 dpois()
-# These are all DISCRETE
 
+# CONTINUOUS distributions from Chapter 5
+dunif() # uniform PDF
+dexp() # exponential PDF
+ppois() # poisson (discrete) PDF, again
 
 
 
@@ -58,7 +61,7 @@ pbinom(q=18, size=20, prob = 0.63)
 # this is the same as:
 pbinom(q=18, size=20, prob = 0.63, lower.tail = TRUE)
 
-# but setting "lower.tail = FALSE" gives you the probability of 18 MORE MORE SUCCESSES:
+# but setting "lower.tail = FALSE" gives you the probability of 18 OR MORE SUCCESSES:
 pbinom(q=18, size=20, prob = 0.63, lower.tail = FALSE)
 
 # this is the same as:
@@ -83,7 +86,22 @@ dgeom(x, prob)
 
 dpois(x, lambda)
 # x = number of events of interest
-# lambda = mean rate of even in set time period
+# lambda = mean number of events in set time period
+
+# uniform distribution
+# random number generator
+dunif(x, min, max)
+#x= value of interest
+# min = lower bound of the distribution
+# max = upper bound of the distribution
+
+
+# exponential distribution
+# random number generator
+dexp(x, rate)
+# x = value of interest
+# rate = 1/(mean time between events)
+
 
 
 
@@ -130,7 +148,7 @@ plot(cdf, type="l", main = "geometric distribution", xlab ="x", ylab ="cumulativ
 # pick some parameters
 
 
-lambda <- 30 # expected RATE of occurrences in the FIXED time interval
+lambda <- 30 # expected NUMBER of occurrences in the FIXED time interval
 # the rate, lambda, is the mean and the variance of the poisson
 x <- seq(0,100, by=1) # number of occurrences that might occur in that time interval
 
@@ -149,6 +167,162 @@ plot(cdf, type="l", main = "poisson distribution", xlab ="x", ylab ="cumulative 
 
 
 
+# UNIFORM distribution
+#Pick some parameters
+#PDF
+x <- seq(0,100, by=.5)
+
+#calculate PDF
+pdf <- dunif(x,min=0, max = 100)
+
+#plot PDF
+plot(pdf, type="l", main = "uniform distribution", xlab ="values", ylab ="probability")
+
+# Calculate CDF
+cdf <- punif(x,min=0, max = 100)
+
+#plot CDF
+plot(cdf, type="l", main = "uniform distribution", xlab ="values", ylab ="cumulative prob.")
+
+
+# EXPONENTIAL Distribution PDF
+#pick some parameters
+x <- seq(0,50, by=.5)
+rate <- 0.3
+
+#calculate PDF
+pdf <- dexp(x,rate=rate)
+
+#Plot PDF
+plot(pdf, type="l", main = "exponential distribution", xlab ="values", ylab ="probability")
+
+# calculate CDF
+cdf <- pexp(x,rate=rate)
+
+plot(cdf, type="l", main = "exponential distribution", xlab ="values", ylab ="cumulative prob.")
+
+
+
+
+# EXAMPLE PROBLEMS
+
+# EXAMPLE problem 1 - Question 2
+
+#The following table gives the possible values of a weighted 4 sided dice, along with the probability of rolling that number:
+
+# x | P(x) |    x*P(x)   | ((x-mu)^2)*P(X)
+# 1 | 0.2  | 1*0.2 = 0.2 | ((0.2-2.8)^2)*0.2  = 1.352
+# 2 | 0.2  | 2*0.2 = 0.4 | ((0.4-2.8)^2)*0.2  = 1.152
+# 3 | 0.2  | 3*0.2 = 0.6 | ((0.6-2.8)^2)*0.2  = 0.968
+# 4 | 0.4  | 4*0.4 = 1.6 | ((0.4-2.8)^2)*0.4  = 2.304
+ 
+#What is the standard deviation for the rolls of this die?
+
+# SD is the square root of the sum of the final column
+sqrt(1.352+1.152+0.968+2.304)
+
+
+#Example problem 2 
+
+#UMaine's Admissions program surveyed all freshmen students on whether or not the university should have hybrid learning options. 
+# 54% of the students said that the university should offer hybrid in class and online options. Say you sampled 10 of these students.
+# If you wanted to survey 10 of these students, what is the probability that at least 3 of them would want hybrid class options?
+
+#As this is the binary, yes or not question, we are dealing with a binomial distribution,and will make use of the binom functions
+#since we want to know the probability of at least 3 "yes" votes (3 or fewer, not exactly 3) we want the CDF function, as opposed to the PDF.
+#As such, we will use the pbinom() function
+
+q <- 3 #most number of yes votes we want (or "successes")
+size <- 10 #sample size (or "number of trials")
+p <- 0.54 #proportion of yes votes in the population (population probability of success)
+pbinom(q,size,p)
+
+
+#Example problem 3 - Question 3
+
+# After looking at her logs for the day, the Orono elementary school nurse found that 8% of students who come to their office 
+# have a fever.
+
+#If 50 students visit the nurse in a day, how many would you expect to have the flu on average?
+
+#this is a binomial probability problem, and we are looking for the average number of successes (students who DO have a fever).
+#the average of a binomial distribution with probability p is N*p
+
+N <- 50 #50 students in the sample
+p <- .08 #proportion of students who have a fever (8% equals .08)
+expected <- N*p
+# you would expect 4 students to have a fever
+
+#Example problem 4
+
+#Part 1 - Question 5
+#The UMaine bookstore gets 60 students per day on average.
+# What is the probability that 50 students go to the bookstore tomorrow?
+
+#Since this data is a count, we will use the poisson distribution.
+#we will use the the PDF (dpois) to answer the question, since we want the probability that EXACTLY 30 students (not 30 or less)
+
+mean <- 60 #poisson distributions use one parameter to represent the mean and the variance
+target <- 50# the number we want to know the probability of
+dpois(target,mean)
+
+
+#Part 2 Question 6
+#The bookstore manager wants to know what the probability of 40,50,60,70, and 80 students is on a given day
+
+mean <- 60#poisson distributions use one parameter to represent the mean and the variance
+targets <- c(40,50,60,70,80) # the numbers we want to know the probability of
+dpois(targets,mean)#dpois will read a vector of target counts and return a vector of corresponding probabilitites
+
+#Example problem 5 - Question 8
+# Facilities estimates that the square footage of dorms are uniformly distributed between 200 square feet and 300 square feet 
+#with an average of 250 and a standard deviation of 28.86751
+# what is the probability of you getting a dorm room between 260 and 280 feet?
+
+#we want the cumulative distribution function of the uniform distribution with a twist
+#In R, we can't find the exact probability on an interval, so we will need to do some subtraction
+#in probability, we can subtract the CDF of A from the CDF of B to get the CDF AB, if A < B:
+A <- punif(260,200,300)#Cumulative probability of 260
+B <- punif(280,200,300)#cumulative probability of 280
+B-A #the P 260<x<280 is equal to CDF(B)-CDF(A)
+
+
+#Example problem 6 - Question 11
+
+#Dr. Waring spends an average of 2 minutes grading a students homework before moving onto the next 
+# and he models this time as x ~ exp(1/2), 
+#x is exponentially distributed with a rate parameter of 1 over the average 
+#what is the probability that he spends between .5 minutes and and 2 minutes grading a given students assignment?
+
+
+#This is another case of subtracting cumulative distribution functions, only now we're using the exponential distribution 
+#since we're dealing with the time between events (time between switching to a new homework)
+rate <- 1/2 #rate parameter is equal to 1/average
+A <- pexp(.5,rate)
+B <- pexp(2,rate)
+B-A #the P .5<x<2 is equal to CDF(B)-CDF(A)
+
+
+#Example problem 7 - Question 14a
+#Dr. Waring and his colleges at SOE play a game by selecting from a deck of 52 cards and rolling a 6 sided dice, and play using vacation days
+#The Rules are as follow:
+# 1) selecting a face card and rolling an even number gains you 2 vacation day
+# 2) selecting a face card and rolling an odd number gains you 1 vacation day
+# 3) selecting a numeric card and rolling an odd number gains you nothing
+# 4) selecting a numeric card and rolling an even number looses 2.5 vacation days
+
+#Find the expected value for this game.
+
+
+#list the possible payouts, their probabilities, and the probabilities * payouts, as in example problem 1 (round probabilities to the nearest thousandth place)
+#   x  |  P(x)  | x*P(x) |   
+#   2  | 0.153  |  0.306 | 
+#   1  | 0.153  |  0.153 | 
+#   0  | 0.346  |  0.000 | 
+# -2.5 | 0.346  | -0.865 | 
+
+#Expected payout is the sum x*P(X)
+sum(c(0.306,0.153,0,-0.865))
 
 
 
@@ -156,150 +330,7 @@ plot(cdf, type="l", main = "poisson distribution", xlab ="x", ylab ="cumulative 
 
 
 
-# EXAMPLE problem 1
-
-# It has been stated that about 41% of adult workers have a high school diploma but do not pursue any further education. If 20 adult workers are randomly selected, find the probability that at most 12 of them have a high school diploma but do not pursue any further education. How many adult workers do you expect to have a high school diploma but do not pursue any further education?
-
-# STEP 1
-# describe the random variable
-# Let X = the number of workers who have a high school diploma but do not pursue any further education.
-# X takes on the values 0, 1, 2, ..., 20
-
-# STEP 2
-# pick the distribution
-# binomial, because of independent probabilities
-
-# STEP 3
-# gather data and parameters
-n = 20
-p = 0.41
-x = 12
-# also: q = 1 – 0.41 = 0.59
-
-# STEP 4
-# assemble distribution with parameters:
-# X ~ B(20, 0.41)
-
-
-# Part A
-# find probability of x = 12
-# PDF, so use dbinom()
-dbinom(x=12, size=20, prob = 0.41)
-
-
-# Part B
-# Find P(x ≤ 12)
-# CDF, so use pbinom()
-# pbinom(q=x, size=n, prob=p)
-pbinom(q=12, size=20, prob = 0.41)
-# or
-pbinom(q=12, size=20, prob = 0.41, lower.tail = TRUE)
 
 
 
-
-
-# EXAMPLE problem 2
-
-# The lifetime risk of developing pancreatic cancer is about one in 78 (1.28%). Let X = the number of people you ask before one says he or she has pancreatic cancer. The random variable X in this case includes only the number of trials that were failures and does not count the trial that was a success in finding a person who had the disease. The appropriate formula for this random variable is the second one presented above. Then X is a discrete random variable with a geometric distribution: X ~ G(1/78) or X ~ G(0.0128).
-
-# STEP 1
-# Why is this a geometric dist?
-# - because of counting the number of trails that were failures until you reach a success.
-
-# Part A
-# What is the probability of that you ask 9 people before one says he or she has pancreatic cancer? This is asking, what is the probability that you ask 9 people unsuccessfully and the tenth person is a success?
-
-# STEP 2
-p = 1/78
-x = 9
-
-# STEP 3
-# how to use geometric distribution?
-# it's a PDF, because we are interested in a SINGLE, SPECIFIC OUTCOME:
-
-# STEP 4
-# plug in your data, carefully. Do it in a clear and safe way:
-
-# All of these produce the same results:
-dgeom(x=9, prob=1/78) # most clear way
-# or
-dgeom(x=x, prob=p) # less clear
-# or
-dgeom(9, 1/78) # unclear
-# or
-dgeom(x, p) # unclear, dangerous
-
-
-
-# Part B
-# What is the probability that you must ask 20 people?
-p = 1/78
-x = 20
-dgeom(prob=p,x=x)
-
-
-# Part C
-# Find the (i) mean and (ii) standard deviation of X
-
-# mean
-p = 1/78
-mu <- (1-p)/p
-
-# sd
-p = 1/78
-sqrt((1-p)/p^2)
-77.49839
-
-
-
-
-
-# POISSON example
-# Example 4.16
-# Text message users receive or send an average of 41.5 text messages per day.
-
-# SO, this is a poisson!! WHY?
-
-# A - How many text messages does a text message user receive or send per hour?
-41.5/24
-
-
-# B - What is the probability that a text message user receives or sends two messages per hour?
-dpois(x=2, lambda = 41.5/24)
-0.2652627
-
-# C - What is the probability that a text message user receives or sends more than two messages per hour?
-
-# poisson
-# ppois() - because we want CUMULATIVE PROB, CDF
-# CDF is everything UP TO THAT POINT but we want everything after that point
-
-ppois(q=2, lambda = 41.5/24)
-
-1 - ppois(q=2, lambda = 41.5/24)
-
-ppois(q=2, lambda = 41.5/24, lower.tail = FALSE)
-
-
-
-
-
-
-# Finally, I want to show N choose K, or the combinatorial formula
-
-# N choose K gives you the number of ways you can get a given subset of items, k, from a larger set, n.
-# the R command is
-choose(n,k)
-
-# test the function
-# the number of possible 5-card hands from a deck of 52 cards is...
-choose(52,5)
-2598960 # wow. That's a lot.
-
-# n choose k is a fundamental building block of lots of statistical operations.
-
-# example 4.1
-choose(30,5)*choose(20,5)/choose(50,10)
-# 0.215085
 
