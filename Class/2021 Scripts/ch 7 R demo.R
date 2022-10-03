@@ -64,18 +64,9 @@ hist(means)
 # 7.1
 # An unknown distribution has a mean of 90 and a standard deviation of 15. Samples of size n = 25 are drawn randomly from the population.
 # a. Find the probability that the sample mean is between 85 and 92.
-pnorm(q=85,mean=90, sd=15/sqrt(25))
-# [1] 0.04779035
-pnorm(q=92,mean=90, sd=15/sqrt(25)) - 0.04779035
-# 0.6997171
-
-#b. Find the value that is two standard deviations above the expected value, 90, of the sample mean.
-# use zscore formula:
-# value = mean + (# of sds) (sd_x/sqrt(n))
-
-
-
-
+A <- pnorm(q=85,mean=90, sd=15/sqrt(25))
+B <- pnorm(q=92,mean=90, sd=15/sqrt(25)) 
+B-A
 
 #7.2
 #The length of time, in hours, it takes an "over 40" group of people to play one soccer match is normally distributed with a mean of two hours and a standard deviation of 0.5 hours. A sample of size n = 50 is drawn randomly from the population. Find the probability that the sample mean is between 1.8 hours and 2.3 hours.
